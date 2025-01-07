@@ -34,6 +34,7 @@ def upsert_to_silver(batch_df, batch_id):
     if DeltaTable.isDeltaTable(spark, silver_table_name):
         # Load the Silver table as a DeltaTable
         silver_table = DeltaTable.forName(spark, silver_table_name)
+        print('Delta table exists')
 
         # Merge the deduplicated batch into the Silver table
         silver_table.alias("silver").merge(

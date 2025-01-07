@@ -1,21 +1,21 @@
 # Databricks notebook source
 # MAGIC %sql
-# MAGIC SELECT * FROM silver.customer LIMIT 10;
+# MAGIC SELECT * FROM gold.dim_customer LIMIT 10;
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT COUNT(1) FROM silver.customer;
+# MAGIC SELECT COUNT(1) FROM gold.dim_customer;
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT COUNT(DISTINCT c_custkey) FROM silver.customer;
+# MAGIC SELECT COUNT(DISTINCT c_custkey) FROM gold.dim_customer;
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT COUNT(DISTINCT source_filename) FROM silver.customer;
+# MAGIC SELECT COUNT(DISTINCT source_filename) FROM gold.dim_customer;
 
 # COMMAND ----------
 
@@ -26,7 +26,7 @@
 
 # MAGIC %sql
 # MAGIC SELECT c_custkey, count(1)
-# MAGIC FROM silver.customer
+# MAGIC FROM gold.dim_customer
 # MAGIC GROUP BY c_custkey
 # MAGIC HAVING count(1) > 1
 # MAGIC ORDER BY count(1) DESC;
@@ -34,7 +34,7 @@
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM silver.customer WHERE c_custkey = 148;
+# MAGIC SELECT * FROM gold.dim_customer WHERE c_custkey = 148;
 
 # COMMAND ----------
 
@@ -49,11 +49,15 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## verify that checkpoint folder for moving data from customer_raw to customer still has logs
+# MAGIC ## verify that checkpoint folder for moving data from silver to dim_customer still has logs
 
 # COMMAND ----------
 
-dbutils.fs.ls('tmp/checkpoint-silver/')
+dbutils.fs.ls('tmp/checkpoint-gold-dim-customer/')
+
+# COMMAND ----------
+
+dbutils.fs.ls('tmp/') 
 
 # COMMAND ----------
 
@@ -62,11 +66,11 @@ dbutils.fs.ls('tmp/checkpoint-silver/')
 
 # COMMAND ----------
 
-spark.sql("SELECT * FROM silver.customer LIMIT 10")
+spark.sql("SELECT * FROM gold.dim_customer LIMIT 10")
 
 # COMMAND ----------
 
-spark.sql("SELECT * FROM gerald_hopkins_workspace.silver.customer LIMIT 10")
+spark.sql("SELECT * FROM gerald_hopkins_workspace.gold.dim_customer LIMIT 10")
 
 # COMMAND ----------
 
@@ -75,9 +79,19 @@ spark.sql("SELECT * FROM gerald_hopkins_workspace.bronze.customer_raw LIMIT 10")
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## check max and min date_added on silver.customer
+# MAGIC ## check max and min start_date on gold.dim_customer
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT MAX(date_added),MIN(date_added) FROM silver.customer;
+# MAGIC SELECT MAX(start_date),MIN(start_date) FROM gold.dim_customer;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT MAX(LEN(c_mktsegment)) FROM gold.dim_customer;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT MAX(LEN(c_phone)) FROM gold.dim_customer;
