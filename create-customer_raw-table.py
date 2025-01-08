@@ -28,4 +28,20 @@ dbutils.fs.ls('/tmp/checkpoint_bronze')
 
 # COMMAND ----------
 
+dbutils.fs.ls('/tmp/schema_bronze/_schemas/')
+
+# COMMAND ----------
+
+dbutils.fs.ls('/tmp/schema_bronze/_schemas/0')
+
+# COMMAND ----------
+
+dbutils.fs.head('/tmp/schema_bronze/_schemas/0')
+
+# COMMAND ----------
+
+dbutils.fs.rm('/tmp/schema_bronze/_schemas/1')
+
+# COMMAND ----------
+
 dbutils.fs.ls('/tmp/')

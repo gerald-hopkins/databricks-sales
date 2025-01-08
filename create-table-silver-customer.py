@@ -36,3 +36,7 @@ dbutils.fs.rm("dbfs:/tmp/checkpoint-silver/", recurse=True)
 # COMMAND ----------
 
 dbutils.fs.ls('dbfs:/tmp/checkpoint-silver/')
+
+# COMMAND ----------
+
+dbutils.fs.ls('tmp/')

@@ -51,3 +51,28 @@
 # MAGIC SELECT DISTINCT source_filename
 # MAGIC FROM bronze.customer_raw
 # MAGIC ORDER BY source_filename;
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Which records came in a specific source file?
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM bronze.customer_raw
+# MAGIC WHERE source_filename LIKE '%cleaned.csv';
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## validate proper handling of inserts and updates
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM 
+# MAGIC (SELECT * FROM bronze.customer_raw
+# MAGIC WHERE source_filename LIKE '%cleaned.csv') a 
+# MAGIC JOIN bronze.customer_raw b 
+# MAGIC ON a.c_custkey = b.c_custkey;
