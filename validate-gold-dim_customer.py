@@ -20,7 +20,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Check for duplicate c_custkey's in silver.customer
+# MAGIC ## Check for duplicate c_custkey's in gold.dim_customer
 
 # COMMAND ----------
 

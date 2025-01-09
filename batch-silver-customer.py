@@ -1,9 +1,4 @@
 # Databricks notebook source
-# MAGIC %md
-# MAGIC # Stream customer data from delta bronze.customer_raw to delta silver.customer
-
-# COMMAND ----------
-
 from pyspark.sql.functions import col, desc, row_number
 from pyspark.sql.window import Window
 from delta.tables import DeltaTable
@@ -11,12 +6,6 @@ from delta.tables import DeltaTable
 # Table names in Unity Catalog
 bronze_table_name = "gerald_hopkins_workspace.bronze.customer_raw"  # Unity Catalog table name for Bronze
 silver_table_name = "gerald_hopkins_workspace.silver.customer"      # Unity Catalog table name for Silver
-
-# Start a streaming read from the Bronze table
-bronze_stream = (
-    spark.readStream.format("delta")
-    .table(bronze_table_name)  # Use the Unity Catalog table name
-)
 
 # Function to deduplicate the batch DataFrame
 def deduplicate_latest_records(batch_df):
@@ -41,7 +30,7 @@ def upsert_to_silver(batch_df, batch_id):
     batch_df_deduplicated = deduplicate_latest_records(batch_df)
 
     # Check if the Silver table exists
-    if DeltaTable.isDeltaTable(spark, silver_table_name):
+    if spark.catalog.tableExists(silver_table_name):
         # Load the Silver table as a DeltaTable
         silver_table = DeltaTable.forName(spark, silver_table_name)
 
@@ -53,20 +42,36 @@ def upsert_to_silver(batch_df, batch_id):
         ).whenNotMatchedInsertAll(
         ).execute()
     else:
-        # Create the Silver table on the first run with schema evolution
+        # Create the Silver table on the first run with `ignore` mode
         batch_df_deduplicated.write.format("delta") \
-            .mode("overwrite") \
+            .mode("ignore") \
             .option("mergeSchema", "true") \
             .saveAsTable(silver_table_name)
+
+        # Load the Silver table and reapply the merge for the first batch
+        silver_table = DeltaTable.forName(spark, silver_table_name)
+        silver_table.alias("silver").merge(
+            batch_df_deduplicated.alias("bronze"),
+            "silver.c_custkey = bronze.c_custkey"
+        ).whenMatchedUpdateAll(
+        ).whenNotMatchedInsertAll(
+        ).execute()
+
+# Start a streaming read from the Bronze table
+bronze_stream = (
+    spark.readStream.format("delta")
+    .table(bronze_table_name)  # Use the Unity Catalog table name
+)
 
 # Write the stream and apply the upsert function
 query = (
     bronze_stream.writeStream
     .foreachBatch(upsert_to_silver)  # Use foreachBatch for batch processing
-    .outputMode("update")            # Update output mode ensures incremental processing
+    .trigger(once=True)             # Trigger once to process all available data and stop
     .option("checkpointLocation", "dbfs:/tmp/checkpoint-silver/")  # Checkpoint for streaming
     .start()
 )
 
-query.awaitTermination()
+# Wait for the streaming query to finish
+query.awaitTermination()  # This will return after the streaming query has completed
 

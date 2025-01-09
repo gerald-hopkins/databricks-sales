@@ -76,3 +76,25 @@
 # MAGIC WHERE source_filename LIKE '%cleaned.csv') a 
 # MAGIC JOIN bronze.customer_raw b 
 # MAGIC ON a.c_custkey = b.c_custkey;
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Display the runs of this stream
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT date_added, count(1)
+# MAGIC FROM bronze.customer_raw
+# MAGIC GROUP BY date_added
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Any rescued data?
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM bronze.customer_raw WHERE `_rescued_data` IS NOT NULL

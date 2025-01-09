@@ -48,12 +48,12 @@ dbutils.fs.ls('tmp/checkpoint-silver/')
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Did any new records show up in the last stream?
+# MAGIC ## Did any changed or new records show up in the last stream?
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM silver.customer WHERE date_added = '2025-01-08T05:54:26.112+00:00'
+# MAGIC SELECT * FROM silver.customer WHERE date_added = '2025-01-09T04:42:36.409+00:00'
 
 # COMMAND ----------
 
@@ -64,3 +64,10 @@ dbutils.fs.ls('tmp/checkpoint-silver/')
 
 # MAGIC %sql
 # MAGIC SELECT * FROM silver.customer WHERE c_custkey IN (32,115)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT date_added, COUNT(1)
+# MAGIC FROM silver.customer
+# MAGIC GROUP BY date_added;
