@@ -61,7 +61,7 @@
 
 # MAGIC %sql
 # MAGIC SELECT * FROM bronze.customer_raw
-# MAGIC WHERE source_filename LIKE '%cleaned.csv';
+# MAGIC WHERE source_filename LIKE '%cleaned_changed.csv';
 
 # COMMAND ----------
 

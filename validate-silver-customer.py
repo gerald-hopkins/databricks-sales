@@ -53,7 +53,7 @@ dbutils.fs.ls('tmp/checkpoint-silver/')
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM silver.customer WHERE date_added = '2025-01-09T21:12:03.564+00:00'
+# MAGIC SELECT * FROM silver.customer WHERE date_added = '2025-01-10T04:31:58.926+00:00'
 
 # COMMAND ----------
 

@@ -101,18 +101,14 @@ spark.sql("SELECT * FROM gerald_hopkins_workspace.bronze.customer_raw LIMIT 10")
 # MAGIC %sql
 # MAGIC SELECT * FROM gold.dim_customer
 # MAGIC WHERE end_date IS NOT NULL
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC SELECT * FROM gold.dim_customer
-# MAGIC WHERE end_date IS NOT NULL
+# MAGIC ORDER BY c_custkey, end_date
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC SELECT * FROM gold.dim_customer
 # MAGIC WHERE c_custkey IN (32,115, 5435,50000)
+# MAGIC ORDER BY c_custkey,start_date
 
 # COMMAND ----------
 
