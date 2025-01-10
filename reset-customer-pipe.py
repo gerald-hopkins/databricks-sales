@@ -66,11 +66,12 @@ dbutils.fs.rm('/tmp/checkpoint-gold-dim-customer/', recurse=True)
 # MAGIC   date_added TIMESTAMP,
 # MAGIC   PRIMARY KEY (c_custkey)
 # MAGIC ) USING DELTA
+# MAGIC TBLPROPERTIES ('delta.enableChangeDataFeed' = 'true');
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC CREATE TABLE IF NOT EXISTS gerald_hopkins_workspace.gold.dim_customer (
+# MAGIC CREATE TABLE gerald_hopkins_workspace.gold.dim_customer (
 # MAGIC   dim_customer_id BIGINT GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
 # MAGIC   c_custkey INT NOT NULL,
 # MAGIC   c_name STRING,
@@ -83,5 +84,18 @@ dbutils.fs.rm('/tmp/checkpoint-gold-dim-customer/', recurse=True)
 # MAGIC   source_filename STRING,
 # MAGIC   start_date TIMESTAMP NOT NULL,
 # MAGIC   end_date TIMESTAMP,
+# MAGIC   is_current BOOLEAN NOT NULL, 
 # MAGIC   CONSTRAINT dim_customer_pk PRIMARY KEY (dim_customer_id)
-# MAGIC ) USING DELTA
+# MAGIC ) USING DELTA;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC ALTER TABLE gerald_hopkins_workspace.gold.dim_customer 
+# MAGIC SET TBLPROPERTIES ('delta.feature.allowColumnDefaults' = 'enabled');
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC ALTER TABLE gerald_hopkins_workspace.gold.dim_customer 
+# MAGIC ALTER COLUMN is_current SET DEFAULT TRUE;

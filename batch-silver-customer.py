@@ -22,6 +22,7 @@ def upsert_to_silver(batch_df, batch_id):
     Perform upsert (update and insert) into the Silver Delta table.
     Handles schema evolution automatically.
 
+
     Args:
         batch_df: DataFrame representing the batch of streaming data.
         batch_id: Unique identifier for the batch.
@@ -74,4 +75,5 @@ query = (
 
 # Wait for the streaming query to finish
 query.awaitTermination()  # This will return after the streaming query has completed
+
 

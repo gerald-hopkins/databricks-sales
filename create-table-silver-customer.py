@@ -1,6 +1,21 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC # CREATE the silver.customer table
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## DROP the existing table first
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC DROP TABLE gerald_hopkins_workspace.silver.customer;
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## CREATE the table as delta lake and with CDF
 
 # COMMAND ----------
 
@@ -18,6 +33,7 @@
 # MAGIC   date_added TIMESTAMP,
 # MAGIC   PRIMARY KEY (c_custkey)
 # MAGIC ) USING DELTA
+# MAGIC TBLPROPERTIES ('delta.enableChangeDataFeed' = 'true');
 
 # COMMAND ----------
 
