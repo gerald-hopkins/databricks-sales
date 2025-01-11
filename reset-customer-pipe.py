@@ -64,9 +64,11 @@ dbutils.fs.rm('/tmp/checkpoint-gold-dim-customer/', recurse=True)
 # MAGIC   c_comment STRING,
 # MAGIC   source_filename STRING,
 # MAGIC   date_added TIMESTAMP,
+# MAGIC   hash_value STRING, 
 # MAGIC   PRIMARY KEY (c_custkey)
 # MAGIC ) USING DELTA
 # MAGIC TBLPROPERTIES ('delta.enableChangeDataFeed' = 'true');
+# MAGIC
 
 # COMMAND ----------
 

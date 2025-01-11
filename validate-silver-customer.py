@@ -53,7 +53,7 @@ dbutils.fs.ls('tmp/checkpoint-silver/')
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM silver.customer WHERE date_added = '2025-01-10T04:31:58.926+00:00'
+# MAGIC SELECT * FROM silver.customer WHERE date_added = '2025-01-11T08:03:48.345+00:00'
 
 # COMMAND ----------
 
@@ -71,3 +71,9 @@ dbutils.fs.ls('tmp/checkpoint-silver/')
 # MAGIC SELECT date_added, COUNT(1)
 # MAGIC FROM silver.customer
 # MAGIC GROUP BY date_added;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT COUNT(1) FROM silver.customer
+# MAGIC WHERE hash_value IS NULL;

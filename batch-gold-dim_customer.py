@@ -25,6 +25,10 @@ def scd2_upsert_to_gold(batch_df, batch_id):
     print(f"Processing batch {batch_id}")
     display(batch_df)  # Display the batch data for debugging
 
+    # Drop the hash_value column if it exists in the batch dataframe
+    if "hash_value" in batch_df.columns:
+        batch_df = batch_df.drop("hash_value")
+
     # Exclude the date_added column
     if "date_added" in batch_df.columns:
         batch_df = batch_df.drop("date_added")
@@ -140,5 +144,4 @@ query = (
 
 # Wait for the query to finish
 query.awaitTermination()
-
 
